@@ -12,7 +12,7 @@ const io = new Server(server)
 
 import { loadChats } from './src/schemas/querys.js'
 
-const URL_DB = `mysql://bwer5rbb1fcthxxz1211:pscale_pw_Ep0QRBFl9rgXAaTYhleHduozjoNABTMIuIwvAjZN6To@aws.connect.psdb.cloud/databaseusers?ssl={"rejectUnauthorized":true}`
+const URL_DB = process.env.URL_BD
 
 const connection = mysql.createConnection(URL_DB)
 
