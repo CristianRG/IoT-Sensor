@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC controlller</title>
+</head>
+
+<body>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        :root {
+            color-scheme: light dark;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 1rem;
+        }
+
+        button {
+            background: rgba(13, 15, 15, 0.884);
+            border: none;
+            font-size: 30px;
+            padding: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid white;
+        }
+
+        h1 {
+            position: absolute;
+            top: 35%;
+            font-size: 40px;
+        }
+
+        p {
+            position: absolute;
+            top: 45%;
+            font-size: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+
+        }
+
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            font-size: 20px;
+        }
+
+        .modal label {
+            font-size: 20px;
+            display: block;
+        }
+
+        .modal .actions {
+            width: fit-content;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 1rem;
+        }
+
+        .modal {
+            display: none;
+        }
+    </style>
+
+    <main>
+        <h1>PC controlller</h1>
+        <p>Volumen: <span id="volumen"></span></p>
+
+        <section>
+            <button id="hibernate">Hibernate</button>
+            <button id="shutdown">Shutdown</button>
+            <button id="up">^</button>
+            <button id="down">v</button>
+            <button id="other">Other</button>
+        </section>
+
+        <div class="modal" id="modal">
+            <article>
+                <label for="link">Put a link to open in the pc browser</label>
+                <input type="text" id="link">
+                <div class="actions">
+                    <button id="open">Open</button>
+                    <button id="cancel">Cancel</button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.7.2/socket.io.esm.min.js";
+
+        const socket = io();
+
+        const hibernate = document.getElementById('hibernate');
+        const shutdown = document.getElementById('shutdown');
+        const volumenElement = document.getElementById('volumen');
+        const up = document.getElementById('up');
+        const down = document.getElementById('down');
+        const other = document.getElementById('other');
+
+        const open = document.getElementById('open');
+        const cancel = document.getElementById('cancel');
+        const modal = document.getElementById('modal');
+
+        let volumen = 0;
+
+        socket.on('generalStatus', (object) => {
+            volumen = object.volumen;
+            volumenElement.innerHTML = object.volumen;
+        })
+
+        socket.on('message', (object) => {
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: object.message,
+                showConfirmButton: false,
+                timer: 1000
+            });
+        })
+
+        other.addEventListener('click', () => {
+            showModal(true);
+        })
+
+
+
+        hibernate.addEventListener('click', function () {
+            // mostramos una ventana preguntando sobre si esta segurdo de apagar el equipo
+            Swal.fire({
+                title: "Are you sure you want to hibernate the pc?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    socket.emit('hibernate')
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "The pc will be in hibernate mode in 2 seconds...",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("No se apagara el pc", "", "info");
+                }
+            })
+        })
+
+        shutdown.addEventListener('click', function () {
+            socket.emit('coming soon', 'coming soon')
+            Swal.fire({
+                position: "center",
+                icon: "info",
+                title: "Coming soon!",
+                showConfirmButton: false,
+                timer: 1000
+            });
+
+        })
+
+        up.addEventListener('click', function () {
+            let previousVolumen = volumen;
+            volumen += 10;
+
+            if (volumen > 100 || volumen < 0) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "The volume cannot be higher than 100 or lower than 0",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                volumen = previousVolumen;
+            }
+            volumenElement.innerHTML = volumen;
+            socket.emit('volumenUpdate', { volumen: volumen })
+        })
+
+        down.addEventListener('click', function () {
+            let previousVolumen = volumen;
+            volumen -= 10;
+
+            if (volumen > 100 || volumen < 0) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "The volume cannot be higher than 100 or lower than 0",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                volumen = previousVolumen;
+            }
+            volumenElement.innerHTML = volumen;
+            socket.emit('volumenUpdate', { volumen: volumen })
+        })
+
+        open.addEventListener('click', function () {
+            showModal(true)
+            const link = document.getElementById('link').value;
+            socket.emit('open', { website: link })
+            document.getElementById('link').value = ''
+        })
+
+        cancel.addEventListener('click', function () {
+            showModal(false)
+        })
+
+        function showModal(action) {
+            if (action) {
+                modal.style.display = "flex";
+                return
+            }
+            modal.style.display = "none";
+        }
+
+    </script>
+
+    <script>
+
+
+
+
+    </script>
+</body>
+
+</html>

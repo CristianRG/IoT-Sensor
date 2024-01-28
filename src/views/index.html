@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor IOT</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <nav></nav>
+    </header>
+    <main>
+        <section>
+            <div class="movimiento">
+                <h1>Movimientos detectados</h1>
+                <span>0</span>
+                <button id="details">Detalles</button>
+            </div>
+            <div class="temperatura">
+                <h1>Temperatura</h1>
+                <span>0°</span>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="js/socketClient.js"></script>
+    <script src="js/sensor.js"></script>
+</body>
+</html>

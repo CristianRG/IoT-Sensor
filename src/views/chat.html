@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="styles/chat.css">
+</head>
+<body>
+    <main>
+        <div class="chats">
+            <nav>
+                <ul>
+                    <li>chat</li>
+                    <li>chat</li>
+                </ul>
+            </nav>
+            <div class="chat" id="45">
+                <div class="name">Cristian</div>
+                <div class="hour">6:30 p.m.</div>
+                <div class="message">Hola, que tal</div>
+                <div class="count-messages">
+                    <span>3</span>
+                </div>
+            </div>
+            <div class="chat" id="23">
+                <div class="name">Cristian</div>
+                <div class="hour">6:30 p.m.</div>
+                <div class="message">Hola, que tal</div>
+                <div class="count-messages">
+                    <span>2</span>
+                </div>
+            </div>
+            <div class="chat" id="11">
+                <div class="name">Cristian</div>
+                <div class="hour">6:30 p.m.</div>
+                <div class="message">Hola, que tal</div>
+                <div class="count-messages">
+                    <span>10</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-content">
+            <div class="info-contact">
+                <div class="image-contact"></div>
+                <div class="name-contact">Cristian</div>
+                <div class="options">|</div>
+            </div>
+            <div class="messages">
+                <ul id="listMessages">
+                    <li class="contact">Hey</li>
+                    <li class="you">Whats up?</li>
+                    <li class="contact">All right!</li>
+                    <li class="you">Thats great!</li>
+                    <li class="contact">What about you?</li>
+                    <li class="you">Well, could be better, but is not bad, isnt?</li>
+                    <li class="you">Cock</li>
+                </ul>
+            </div>
+            <div class="form-message">
+                <i>Icon</i>
+                <!-- <input type="text" class="message" id="message" placeholder="Write here..."> -->
+                <textarea name="message" id="message" placeholder="Write"></textarea>
+                <button id="sendMessage">Send</button>
+            </div>
+            <div class="info">
+                <h2>Selecciona un chat para comenzar a chatear</h2>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="https://cdn.socket.io/4.7.2/socket.io.esm.min.js"></script>
+    <script src="js/cookie.js"></script>
+    <script src="js/chat.js"></script>
+    <script type="module" src="js/socketClient.js"></script>
+</body>
+</html>
