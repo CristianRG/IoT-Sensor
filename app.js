@@ -64,8 +64,9 @@ io.on('connection', (socket)=> {
         
         if(information.movimiento){
             saveMove(information)
-            //socket.broadcast.emit('RECEIVED_INFORMATION', {movimiento: information.movimiento})
+            socket.broadcast.emit('RECEIVED_INFORMATION', {movimiento: information.movimiento})
         }else if(information.temperature){
+            socket.broadcast.emit('RECEIVED_INFORMATION', {temperatura: information.temperature})
             saveTemperature(information)
         }
         

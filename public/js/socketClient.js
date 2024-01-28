@@ -19,6 +19,13 @@ const socket = io()
 //     }
 // })
 
+const temperatura = document.getElementById('temperatura')
+const movimiento = document.getElementById('movimiento')
+
 socket.on('RECEIVED_INFORMATION', function (information) {
-    console.log(information)
+    if(information.movimiento){
+        movimiento.innerHTML = information.movimiento;
+    } else if (information.temperatura){
+        temperatura.innerHTML = information.temperatura
+    }
 })
