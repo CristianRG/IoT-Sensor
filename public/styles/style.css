@@ -52,7 +52,7 @@ section button {
     box-shadow: -7px 8px 25px -4px var(--cards-shadow);
 }
 
-.movimiento span, .temperatura span {
+.movimiento div, .temperatura div {
     display: block;
     font-size: 20px;
     margin-top: 5px;
